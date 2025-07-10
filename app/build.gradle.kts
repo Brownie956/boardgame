@@ -6,6 +6,10 @@ plugins {
     alias(libs.plugins.hilt.android)
 }
 
+hilt {
+    enableAggregatingTask = false
+}
+
 android {
     namespace = "com.cbmedia.boardgame"
     compileSdk = 36
@@ -29,21 +33,24 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
+
     buildFeatures {
         compose = true
+    }
+
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
     }
 }
 
 dependencies {
-
-    implementation(libs.javapoet)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -59,18 +66,12 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler) // or kapt if you prefer
+    ksp(libs.hilt.compiler)
 
 // Required for Hilt + ViewModel
     implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(libs.androidx.runtime.livedata)
-
-    configurations.all {
-        resolutionStrategy {
-            force("com.squareup:javapoet:1.13.0")
-        }
-    }
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
